@@ -13,11 +13,11 @@ builder.Services.AddAuthentication(options =>
         options.Authority = "https://localhost:5443";
         options.RequireHttpsMetadata = false;
     });
-    //.AddIdentityServerAuthentication("Bearer", options =>
-    //{
-    //    options.ApiName = "weatherapi";
-    //    options.Authority = "https://localhost:5443";
-    //});
+//builder.Services.AddAuthentication("Bearer").AddIdentityServerAuthentication("Bearer", options =>
+//{
+//    options.ApiName = "weatherapi";
+//    options.Authority = "https://localhost:5443";
+//});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

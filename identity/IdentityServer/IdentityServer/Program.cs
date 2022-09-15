@@ -16,7 +16,6 @@ builder.Services.AddIdentityServer()
 var app = builder.Build();
 app.UseRouting();
 app.UseIdentityServer();
-
 app.UseEndpoints(endpoints =>
     endpoints.MapGet("/", async context =>
     {

@@ -1,28 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using WeatherMvc.Models;
+using WeatherMvc.Services;
 
 namespace WeatherMvc.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ITokenService _tokenService;
+        public HomeController(ITokenService tokenService, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _tokenService = tokenService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Weather()
         {
             var data = new List<WeatherData>();
 
             using (var client = new HttpClient())
             {
+                var tokenResponse = await _tokenService.GetToken("weatherapi.read");
+
+                client
+                    .SetBearerToken(tokenResponse.AccessToken);
+
                 var result = client
-                    .GetAsync("https://localhost:5445/weatherforecast")
+                    .GetAsync("https://localhost:5445/WeatherForecast")
                     .Result;
+
                 if (result.IsSuccessStatusCode)
                 {
                     var model = result.Content.ReadAsStringAsync().Result;
