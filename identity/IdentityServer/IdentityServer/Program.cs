@@ -1,0 +1,26 @@
+using IdentityServer;
+using IdentityServer4.Models;
+using IdentityServer4.Test;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddIdentityServer()
+    .AddInMemoryClients(Config.Clients)
+    .AddInMemoryIdentityResources(Config.IdentityResources)
+    .AddInMemoryApiResources(Config.ApiResources)
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddTestUsers(Config.Users)
+    .AddDeveloperSigningCredential();
+
+
+var app = builder.Build();
+app.UseRouting();
+app.UseIdentityServer();
+app.UseEndpoints(endpoints =>
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("Hello World");
+    })
+);
+
+app.Run();
